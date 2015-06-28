@@ -6,10 +6,13 @@ var del = require('del');
 var environment = $.util.env.type || 'development';
 var isProduction = environment === 'production';
 var webpackConfig = require('./webpack.config.js').getConfig(environment);
+var exec = require('child_process').exec;
+var deploy = require('gulp-gh-pages');
 
 var port = $.util.env.port || 1337;
-var app = 'app/';
+var app = 'src/';
 var dist = 'dist/';
+var prod = $.util.env.prod || false;
 
 // https://github.com/ai/autoprefixer
 var autoprefixerBrowsers = [                 
@@ -41,21 +44,14 @@ gulp.task('html', function() {
     .pipe($.connect.reload());
 });
 
-gulp.task('styles',function(cb) {
+gulp.task('styles', function(cb) {
+    var debug = !prod ? ' -d' : '';
+    exec('compass compile'+debug, cb);
+});
 
-  // convert stylus to css
-  return gulp.src(app + 'stylus/main.styl')
-    .pipe($.stylus({
-      // only compress if we are in production
-      compress: isProduction,
-      // include 'normal' css into main.css
-      'include css' : true
-    }))
-    .pipe($.autoprefixer({browsers: autoprefixerBrowsers})) 
-    .pipe(gulp.dest(dist + 'css/'))
-    .pipe($.size({ title : 'css' }))
-    .pipe($.connect.reload());
-
+gulp.task('deploy', ['build'], function () {
+  return gulp.src("./dist/**/*")
+    .pipe(deploy());
 });
 
 // add livereload on the given port
