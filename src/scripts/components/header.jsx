@@ -10,16 +10,15 @@ class Header extends React.Component{
   render() {
     return (
       <header className="clearfix">
-        Application Name
-
-        <nav className="clearfix">
-          <div className="nav-item">
-            <Link to="home">Home</Link>
-          </div>
-          <div className="nav-item">
-            <Link to="info">Info</Link>
-          </div>
-        </nav>
+        <div className="container">
+          Application Name
+          <nav className="clearfix">
+            <div className="nav-item">
+            </div>
+            <div className="nav-item">
+            </div>
+          </nav>
+        </div>
       </header>
     );
   }

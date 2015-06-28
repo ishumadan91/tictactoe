@@ -9,7 +9,9 @@ class App extends React.Component {
       <div>
         <Header />
         <div className="content">
-          <RouteHandler/>
+          <div className="container">
+            <RouteHandler/>
+         </div>
         </div>
       </div>
     );
