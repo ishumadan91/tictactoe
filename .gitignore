@@ -1,6 +1,7 @@
 node_modules
 .sass-cache
+
 dist
 app/bower_components
 app/bundles
-*.log
+.publish
