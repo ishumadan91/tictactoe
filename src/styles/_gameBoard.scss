@@ -3,3 +3,22 @@
     width: 400px;
     margin: auto;
 }
+.cells-list {
+    > li {
+        float: left;
+        width: 33.33%;
+        border-right: 1px solid #222;
+        border-bottom: 1px solid #222;
+        > a {
+            display: block;
+            background: #ddd;
+            height: 120px;
+        }
+        &:nth-child(3n) {
+            border-right: none;
+        }
+        &:nth-last-child(1), &:nth-last-child(2), &:nth-last-child(3) {
+            border-bottom: none;
+        }
+    }
+}
