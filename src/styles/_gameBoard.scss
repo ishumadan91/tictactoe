@@ -13,6 +13,11 @@
             display: block;
             background: #ddd;
             height: 120px;
+            font-size: 90px;
+            text-align: center;
+            &:hover, &:focus, &:active {
+                text-decoration: none;
+            }
         }
         &:nth-child(3n) {
             border-right: none;
