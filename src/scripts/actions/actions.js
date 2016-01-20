@@ -1,7 +1,8 @@
 import Reflux from 'reflux';
 
 var actions = Reflux.createActions([
-  'updateCell'
+  'updateCell',
+  'showError'
 ]);
 
 // actions.updateCell.preEmit = function(data1, data2){

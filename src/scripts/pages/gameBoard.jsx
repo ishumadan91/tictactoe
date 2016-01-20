@@ -3,6 +3,29 @@ import React from 'react';
 import GameStore from '../stores/GameStore';
 import actions from '../actions/actions';
 
+class Error extends React.Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            error : null
+        };
+        // actions.listenTo('updateCell', this.updateCell.bind(this))
+        actions.showError.listen(this.showError.bind(this));
+    }
+    render() {
+        if(!this.state.error) {
+            return false;
+        }
+        return (
+            <div className="error">
+                <p>{this.state.error}</p>
+            </div>
+        );
+    }
+    showError(error) {
+        this.setState({error: error});
+    }
+}
 class Cell extends React.Component {
     constructor(props){
         super(props);
@@ -15,7 +38,13 @@ class Cell extends React.Component {
         );
     }
     onClickCell() {
-        if(!this.props.item && GameStore.isPlayerTurn) {
+        if(this.props.item) {
+            actions.showError('Cell already filled');
+        }
+        else if(!GameStore.isPlayerTurn) {
+            actions.showError('CPU turn');
+        }
+        else {
             actions.updateCell(this.props.index, GameStore.getPlayerSymbol())
         }
     }
@@ -43,13 +72,17 @@ class GameBoard extends React.Component {
                 <ul className="cells-list clearfix">
                     {items}
                 </ul>
+                <Error />
             </div>
         );
     }
-    updateCell(index, symbol) {
+    updateCell(index, symbol, fromCPU) {
         var cells = this.state.cells;
         cells[index] = symbol;
         this.setState({cells: cells});
+        if(!fromCPU) {
+            GameStore.makeCPUTurn(cells);
+        }
     }
 }
 export default GameBoard;

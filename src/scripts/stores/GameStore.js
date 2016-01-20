@@ -7,12 +7,9 @@ var GameStore = Reflux.createStore({
         this.isPlayerTurn = true;
         // this.listenTo(actions.loadItems, this.loadItems);
     },
-    isPlayerTurn() {
-        return this.isPlayerTurn;
-    },
-    makeCPUTurn() {
+    makeCPUTurn(cells) {
         this.isPlayerTurn = false;
-        this.processCPUTurn();
+        this.processCPUTurn(cells);
     },
     getPlayerSymbol() {
         return 'O';
@@ -20,8 +17,25 @@ var GameStore = Reflux.createStore({
     getCPUSymbol() {
         return 'X';
     },
-    processCPUTurn() {
-        
+    processCPUTurn(cells) {
+        var pos = this.getRandom(cells);
+        // Logic for manipulation here
+        if(typeof pos == 'undefined') {
+            return;
+        }
+        this.isPlayerTurn = true;
+        actions.updateCell(pos, this.getCPUSymbol(), true);
+    },
+    getRandom(cells) {
+        var x=0;
+        var free = [];
+        for(var i=0;i<9;i++) {
+            if(!cells[i]) {
+                free.push(i);
+            }
+        }
+        var ran= Math.floor(Math.random() * free.length);
+        return free[ran];
     }
 });
 
