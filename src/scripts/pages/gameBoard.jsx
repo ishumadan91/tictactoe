@@ -45,7 +45,7 @@ class Cell extends React.Component {
             actions.showError('CPU turn');
         }
         else {
-            actions.updateCell(this.props.index, GameStore.getPlayerSymbol())
+            GameStore.setCellData(this.props.index, GameStore.getPlayerSymbol());
         }
     }
 }
@@ -56,7 +56,7 @@ class GameBoard extends React.Component {
             cells : ['', '', '', '', '', '', '', '', '']
         };
         // actions.listenTo('updateCell', this.updateCell.bind(this))
-        actions.updateCell.listen(this.updateCell.bind(this));
+        actions.updateCellInView.listen(this.updateCellInView.bind(this));
     }
     componentDidMount() {
     }
@@ -76,13 +76,8 @@ class GameBoard extends React.Component {
             </div>
         );
     }
-    updateCell(index, symbol, fromCPU) {
-        var cells = this.state.cells;
-        cells[index] = symbol;
+    updateCellInView(cells) {
         this.setState({cells: cells});
-        if(!fromCPU) {
-            GameStore.makeCPUTurn(cells);
-        }
     }
 }
 export default GameBoard;
