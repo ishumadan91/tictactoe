@@ -3,27 +3,29 @@ import React from 'react';
 import GameStore from '../stores/GameStore';
 import actions from '../actions/actions';
 
-class Error extends React.Component {
+class Status extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            error : null
+            status : null,
+            text : null
         };
         // actions.listenTo('updateCell', this.updateCell.bind(this))
-        actions.showError.listen(this.showError.bind(this));
+        actions.showStatus.listen(this.showStatus.bind(this));
     }
     render() {
-        if(!this.state.error) {
+        if(!this.state.status || !this.state.text) {
             return false;
         }
         return (
-            <div className="error">
-                <p>{this.state.error}</p>
+            <div className={this.state.status}>
+                <p>{this.state.text}</p>
             </div>
         );
     }
-    showError(error) {
-        this.setState({error: error});
+    showStatus(options) {
+        options = options || { status: null, text: null};
+        this.setState(options);
     }
 }
 class Cell extends React.Component {
@@ -39,12 +41,13 @@ class Cell extends React.Component {
     }
     onClickCell() {
         if(this.props.item) {
-            actions.showError('Cell already filled');
+            actions.showStatus({status: 'error', text: 'Cell already filled'});
         }
         else if(!GameStore.isPlayerTurn) {
-            actions.showError('CPU turn');
+            actions.showStatus({status: 'error', text: 'CPU turn'});
         }
         else {
+            actions.showStatus();
             GameStore.setCellData(this.props.index, GameStore.getPlayerSymbol());
         }
     }
@@ -72,7 +75,7 @@ class GameBoard extends React.Component {
                 <ul className="cells-list clearfix">
                     {items}
                 </ul>
-                <Error />
+                <Status />
             </div>
         );
     }

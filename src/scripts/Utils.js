@@ -55,7 +55,7 @@ var Utils = {
         }
         else if(i+j==2) {
             count=0;
-            for(var k=0;k<=3;k++) {
+            for(var k=0;k<3;k++) {
                 if(cells[k*3 + 2 - k] ==symbol) {
                     count++;
                 }
@@ -68,6 +68,17 @@ var Utils = {
             }
         }
         return false;
+    },
+    getRandom(cells) {
+        var x=0;
+        var free = [];
+        for(var i=0;i<9;i++) {
+            if(!cells[i]) {
+                free.push(i);
+            }
+        }
+        var ran= Math.floor(Math.random() * free.length);
+        return free[ran];
     }
 }
 export default Utils;

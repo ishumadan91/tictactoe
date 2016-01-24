@@ -28,6 +28,7 @@ var GameStore = Reflux.createStore({
         var isWon = this.checkIfWon();
         actions.updateCellInView(this.cells);
         if(isWon) {
+            actions.showStatus({status: 'success', text: (this.isPlayerTurn?'Player':'CPU') + ' won' });
             console.log('won');
         }
         else {
@@ -37,24 +38,13 @@ var GameStore = Reflux.createStore({
         }
     },
     processCPUTurn() {
-        var pos = this.getRandom();
+        var pos = Utils.getRandom(cells);
         // Logic for manipulation here
         if(typeof pos == 'undefined') {
             return;
         }
         this.setCellData(pos, this.getCPUSymbol());
         this.isPlayerTurn = true;
-    },
-    getRandom() {
-        var x=0;
-        var free = [];
-        for(var i=0;i<9;i++) {
-            if(!this.cells[i]) {
-                free.push(i);
-            }
-        }
-        var ran= Math.floor(Math.random() * free.length);
-        return free[ran];
     },
     checkIfWon() {
         var symbol = this.isPlayerTurn?this.getPlayerSymbol():this.getCPUSymbol();
