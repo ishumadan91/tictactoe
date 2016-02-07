@@ -6,7 +6,7 @@ var GameStore = Reflux.createStore({
     init() {
         this.cells = ['', '', '', '', '', '', '', '', ''];
         this.isPlayerTurn = true;
-        this.lastMoved = {};
+        this.moves = [{}];
         // this.listenTo(actions.loadItems, this.loadItems);
     },
     makeCPUTurn() {
@@ -23,8 +23,17 @@ var GameStore = Reflux.createStore({
         return this.cells;
     },
     setCellData(index, symbol) {
+        index = parseInt(index);
         this.cells[index] = symbol;
-        this.lastMoved[symbol] = index;
+        var last = this.moves[this.moves.length - 1] || {};
+        if(last[symbol]) {
+            var obj = {};
+            obj[symbol] = index;
+            this.moves.push(obj);
+        }
+        else {
+            last[symbol] = index;
+        }
         var isWon = this.checkIfWon();
         actions.updateCellInView(this.cells);
         if(isWon) {
@@ -38,7 +47,7 @@ var GameStore = Reflux.createStore({
         }
     },
     processCPUTurn() {
-        var pos = Utils.getRandom(cells);
+        var pos = Utils.getRandom(this.cells);
         // Logic for manipulation here
         if(typeof pos == 'undefined') {
             return;
@@ -48,9 +57,8 @@ var GameStore = Reflux.createStore({
     },
     checkIfWon() {
         var symbol = this.isPlayerTurn?this.getPlayerSymbol():this.getCPUSymbol();
-        var lastMoved = this.lastMoved[symbol];
+        var lastMoved = Utils.getLastMoved(this.moves, symbol);
         return Utils.checkRow(this.cells, symbol, 3, lastMoved) || Utils.checkCol(this.cells, symbol, 3, lastMoved) || Utils.checkDiag(this.cells, symbol, 3, lastMoved);
     }
 });
-
 export default GameStore;
