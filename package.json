@@ -40,7 +40,7 @@
     "webpack": "^1.7.3"
   },
   "dependencies": {
-    "react": "^0.13.1",
+    "react": "^0.14.9",
     "react-router": "^0.13.2",
     "gulp-gh-pages": "",
     "reflux": "^0.2.7"
